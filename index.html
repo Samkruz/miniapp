@@ -17,7 +17,8 @@ height:100vh;
 display:flex;
 justify-content:center;
 align-items:center;
-background:radial-gradient(circle at 20% 30%, #3b82f6, transparent 40%),
+background:
+radial-gradient(circle at 20% 30%, #3b82f6, transparent 40%),
 radial-gradient(circle at 80% 70%, #9333ea, transparent 40%),
 #020617;
 }
@@ -71,6 +72,8 @@ margin-top:8px;
 <h2>Kineiro</h2>
 <p>Получите идеи постов</p>
 
+<input id="name" placeholder="Ваше имя">
+
 <select id="niche">
 
 <option value="">Выберите нишу</option>
@@ -96,17 +99,27 @@ margin-top:8px;
 
 <div id="ideas"></div>
 
-<div id="leadForm" style="display:none">
+<button id="leadBtn" onclick="sendLead()" style="display:none;">
+Получить контент план
+</button>
 
-<input id="name" placeholder="Ваше имя">
-
-<button onclick="sendLead()">Получить контент план</button>
-
+<div id="phoneBlock" style="display:none;">
+<button onclick="requestPhone()">
+Оставить номер телефона
+</button>
 </div>
 
 </div>
 
 <script>
+
+const tg = window.Telegram.WebApp;
+tg.expand();
+
+const user = tg.initDataUnsafe.user;
+
+const BOT_TOKEN="8639552988:AAGi3x43OyD5PrRDyOUKrvNk6Ew2sHXDy8Q";
+const CHAT_ID="350662896";
 
 const ideas = {
 
@@ -241,7 +254,7 @@ alert("Выберите нишу");
 return;
 }
 
-let list=ideas[niche] || ["Идея поста 1","Идея поста 2","Идея поста 3"];
+let list=[...ideas[niche]].sort(()=>0.5-Math.random()).slice(0,3);
 
 let html="<h3>Идеи постов:</h3>";
 
@@ -251,23 +264,51 @@ html+=`<div class="idea">${i}</div>`
 
 document.getElementById("ideas").innerHTML=html;
 
-document.getElementById("leadForm").style.display="block";
+document.getElementById("leadBtn").style.display="block";
 
 }
 
 function sendLead(){
 
 let name=document.getElementById("name").value;
-let niche=document.getElementById("niche").value;
 
-let message=`Новая заявка Kineiro
+let select=document.getElementById("niche");
+let niche=select.options[select.selectedIndex].text;
+
+let username=user?.username ? "@"+user.username : "нет username";
+let userid=user?.id || "неизвестно";
+
+let message=`🔥 Новая заявка Kineiro
 
 Имя: ${name}
-Ниша: ${niche}`;
+Ниша: ${niche}
 
-fetch(`https://api.telegram.org/bot8639552988:AAGi3x43OyD5PrRDyOUKrvNk6Ew2sHXDy8Q/sendMessage?chat_id=350662896&text=`+encodeURIComponent(message));
+Telegram: ${username}
+UserID: ${userid}`;
+
+fetch(`https://api.telegram.org/bot${8639552988:AAGi3x43OyD5PrRDyOUKrvNk6Ew2sHXDy8Q}/sendMessage?chat_id=${350662896}&text=`+encodeURIComponent(message));
+
+document.getElementById("phoneBlock").style.display="block";
+
+}
+
+function requestPhone(){
+
+tg.requestContact();
+
+tg.onEvent('contactReceived', function(contact){
+
+let phone=contact.phone_number;
+
+let message=`📞 Пользователь оставил телефон
+
+Телефон: ${phone}`;
+
+fetch(`https://api.telegram.org/bot${8639552988:AAGi3x43OyD5PrRDyOUKrvNk6Ew2sHXDy8Q}/sendMessage?chat_id=${350662896}&text=`+encodeURIComponent(message));
 
 alert("Спасибо! Мы свяжемся с вами.");
+
+});
 
 }
 
@@ -275,4 +316,3 @@ alert("Спасибо! Мы свяжемся с вами.");
 
 </body>
 </html>
-
