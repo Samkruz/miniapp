@@ -3,15 +3,11 @@
 <head>
 
 <meta charset="UTF-8">
-<title>Kineiro AI</title>
+<title>Kineiro</title>
 
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
 <style>
-
-*{
-box-sizing:border-box;
-}
 
 body{
 margin:0;
@@ -24,119 +20,44 @@ align-items:center;
 background:radial-gradient(circle at 20% 30%, #3b82f6, transparent 40%),
 radial-gradient(circle at 80% 70%, #9333ea, transparent 40%),
 #020617;
-overflow:hidden;
-}
-
-.glow{
-position:absolute;
-width:400px;
-height:400px;
-background:#3b82f6;
-filter:blur(200px);
-opacity:0.4;
-top:-100px;
-left:-100px;
-animation:move1 10s infinite alternate;
-}
-
-.glow2{
-position:absolute;
-width:400px;
-height:400px;
-background:#9333ea;
-filter:blur(200px);
-opacity:0.4;
-bottom:-100px;
-right:-100px;
-animation:move2 10s infinite alternate;
-}
-
-@keyframes move1{
-0%{transform:translate(0,0);}
-100%{transform:translate(200px,100px);}
-}
-
-@keyframes move2{
-0%{transform:translate(0,0);}
-100%{transform:translate(-200px,-100px);}
 }
 
 .card{
-
 backdrop-filter:blur(20px);
-background:rgba(15,23,42,0.6);
+background:rgba(15,23,42,0.7);
 padding:30px;
 border-radius:20px;
-width:320px;
+width:340px;
 text-align:center;
-box-shadow:0 0 30px rgba(59,130,246,0.3);
+box-shadow:0 0 40px rgba(59,130,246,0.4);
 }
 
-h1{
-font-size:22px;
-margin-bottom:10px;
-}
-
-input{
+select,input{
 width:100%;
-padding:14px;
+padding:12px;
 border-radius:10px;
 border:none;
-margin-top:20px;
-font-size:16px;
+margin-top:15px;
+font-size:15px;
 }
 
 button{
-
 width:100%;
 padding:14px;
 border-radius:12px;
 border:none;
-margin-top:20px;
+margin-top:15px;
 background:linear-gradient(90deg,#3b82f6,#9333ea);
 color:white;
 font-size:16px;
 cursor:pointer;
-transition:0.3s;
-
-}
-
-button:hover{
-transform:scale(1.05);
-}
-
-.result{
-margin-top:20px;
-text-align:left;
 }
 
 .idea{
 background:rgba(255,255,255,0.05);
 padding:10px;
 border-radius:8px;
-margin-bottom:8px;
-}
-
-.loader{
-
-margin-top:20px;
-display:none;
-
-}
-
-.spinner{
-width:40px;
-height:40px;
-border:4px solid rgba(255,255,255,0.2);
-border-top:4px solid white;
-border-radius:50%;
-animation:spin 1s linear infinite;
-margin:auto;
-}
-
-@keyframes spin{
-0%{transform:rotate(0deg);}
-100%{transform:rotate(360deg);}
+margin-top:8px;
 }
 
 </style>
@@ -145,86 +66,128 @@ margin:auto;
 
 <body>
 
-<div class="glow"></div>
-<div class="glow2"></div>
-
 <div class="card">
 
-<h1>Получите идеи постов</h1>
-<p>для вашего бизнеса</p>
+<h2>Kineiro</h2>
+<p>Получите идеи постов</p>
 
-<input id="niche" placeholder="например: стоматология">
+<select id="niche">
 
-<button onclick="generateIdeas()">
-Получить идеи
-</button>
+<option value="">Выберите нишу</option>
+<option value="beauty">Салон красоты</option>
+<option value="dentist">Стоматология</option>
+<option value="fitness">Фитнес клуб</option>
+<option value="restaurant">Ресторан / кафе</option>
+<option value="shop">Интернет-магазин</option>
+<option value="realestate">Недвижимость</option>
+<option value="education">Образование</option>
+<option value="coach">Психолог / коуч</option>
+<option value="autoservice">Автосервис</option>
+<option value="clinic">Медицинская клиника</option>
+<option value="law">Юридические услуги</option>
+<option value="marketing">Маркетинг</option>
+<option value="travel">Туризм</option>
+<option value="construction">Строительство</option>
+<option value="expert">Личный бренд</option>
 
-<div class="loader" id="loader">
-<div class="spinner"></div>
+</select>
+
+<button onclick="generateIdeas()">Получить идеи</button>
+
+<div id="ideas"></div>
+
+<div id="leadForm" style="display:none">
+
+<input id="name" placeholder="Ваше имя">
+
+<button onclick="sendLead()">Получить контент план</button>
+
 </div>
-
-<div class="result" id="result"></div>
 
 </div>
 
 <script>
 
-let ideas = [
+const ideas = {
 
-"5 ошибок клиентов в этой нише",
-"ответ на популярный вопрос",
-"кейс клиента до/после",
-"миф о вашем продукте",
-"3 совета эксперта",
-"частая проблема клиентов",
-"разбор ошибки",
-"история бизнеса",
-"чеклист для клиента",
-"полезный лайфхак"
+beauty:[
+"5 ошибок в уходе за волосами",
+"До/после клиента",
+"Как выбрать мастера",
+"Тренды красоты 2025",
+"Разбор популярного мифа"
+],
 
-];
+dentist:[
+"5 ошибок при чистке зубов",
+"Когда менять зубную щётку",
+"Мифы о брекетах",
+"История пациента",
+"Ответ стоматолога на вопрос"
+],
+
+fitness:[
+"5 упражнений для новичков",
+"Ошибка №1 в тренировках",
+"История клиента",
+"План питания",
+"Тренировка дома"
+],
+
+restaurant:[
+"Блюдо недели",
+"Как готовится фирменное блюдо",
+"Отзывы гостей",
+"История ресторана",
+"Совет шефа"
+],
+
+shop:[
+"Товар недели",
+"Как выбрать продукт",
+"Отзывы клиентов",
+"ТОП-5 товаров",
+"Разбор популярного вопроса"
+]
+
+};
 
 function generateIdeas(){
 
 let niche=document.getElementById("niche").value;
 
 if(!niche){
-alert("Введите нишу");
+alert("Выберите нишу");
 return;
 }
 
-document.getElementById("loader").style.display="block";
-document.getElementById("result").innerHTML="";
-
-setTimeout(()=>{
-
-document.getElementById("loader").style.display="none";
+let list=ideas[niche] || ["Идея поста 1","Идея поста 2","Идея поста 3"];
 
 let html="<h3>Идеи постов:</h3>";
 
-for(let i=0;i<5;i++){
+list.forEach(i=>{
+html+=`<div class="idea">${i}</div>`
+});
 
-let random=ideas[Math.floor(Math.random()*ideas.length)];
+document.getElementById("ideas").innerHTML=html;
 
-html+=`<div class="idea">${random}</div>`;
-
-}
-
-html+=`<button onclick="contact('${niche}')">Получить 30 постов каждый месяц</button>`;
-
-document.getElementById("result").innerHTML=html;
-
-},1500);
+document.getElementById("leadForm").style.display="block";
 
 }
 
-function contact(niche){
+function sendLead(){
 
-let message=`Хочу контент план\nНиша: ${niche}`;
+let name=document.getElementById("name").value;
+let niche=document.getElementById("niche").value;
 
-let url="https://t.me/Simon_sergeevich?text="+encodeURIComponent(message);
+let message=`Новая заявка Kineiro
 
-window.open(url);
+Имя: ${name}
+Ниша: ${niche}`;
+
+fetch(`https://api.telegram.org/bot8639552988:AAGi3x43OyD5PrRDyOUKrvNk6Ew2sHXDy8Q/sendMessage?chat_id=350662896&text=`+encodeURIComponent(message));
+
+alert("Спасибо! Мы свяжемся с вами.");
 
 }
 
