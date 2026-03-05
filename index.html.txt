@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<meta charset="UTF-8">
+<title>Контент-план для бизнеса</title>
+
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+
+<style>
+
+body{
+font-family:Arial;
+background:#0f172a;
+color:white;
+text-align:center;
+padding:30px;
+}
+
+h1{
+font-size:24px;
+}
+
+input{
+padding:14px;
+width:80%;
+border-radius:8px;
+border:none;
+margin-top:20px;
+font-size:16px;
+}
+
+button{
+padding:14px 24px;
+border:none;
+border-radius:10px;
+background:#3b82f6;
+color:white;
+font-size:16px;
+margin-top:20px;
+cursor:pointer;
+}
+
+.result{
+margin-top:30px;
+background:#1e293b;
+padding:20px;
+border-radius:10px;
+text-align:left;
+}
+
+.offer{
+margin-top:25px;
+background:#334155;
+padding:20px;
+border-radius:10px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<h1>Получите идеи постов для вашего бизнеса</h1>
+
+<p>Введите нишу бизнеса</p>
+
+<input id="niche" placeholder="например: стоматология">
+
+<br>
+
+<button onclick="generateIdeas()">
+Получить идеи
+</button>
+
+<div class="result" id="result"></div>
+
+<div class="offer" id="offer" style="display:none">
+
+<h3>Хотите 30 постов каждый месяц?</h3>
+
+<p>Наша система автоматически создаёт контент для соцсетей.</p>
+
+<button onclick="contact()">
+Получить доступ
+</button>
+
+</div>
+
+<script>
+
+let ideas = [
+
+"5 ошибок клиентов в этой нише",
+"ответ на популярный вопрос клиентов",
+"кейс клиента до/после",
+"мифы о вашем продукте",
+"3 совета эксперта",
+"частая проблема клиентов",
+"разбор ошибки клиентов",
+"история вашего бизнеса",
+"чеклист для клиентов",
+"полезный лайфхак"
+
+];
+
+function generateIdeas(){
+
+let niche=document.getElementById("niche").value;
+
+let html="<h3>10 идей постов для ниши: "+niche+"</h3><ul>";
+
+for(let i=0;i<10;i++){
+
+let random=ideas[Math.floor(Math.random()*ideas.length)];
+
+html+="<li>"+random+"</li>";
+
+}
+
+html+="</ul>";
+
+document.getElementById("result").innerHTML=html;
+
+document.getElementById("offer").style.display="block";
+
+}
+
+function contact(){
+
+window.open("https://t.me/simon_sergeevich?text=Хочу%20контент%20для%20соцсетей");
+
+}
+
+</script>
+
+</body>
+</html>
