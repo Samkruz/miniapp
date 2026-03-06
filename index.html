@@ -141,10 +141,17 @@ margin-top:8px;
 
 <script>
 
-const tg = window.Telegram.WebApp;
-tg.expand();
+let tg = window.Telegram?.WebApp;
 
-const user = tg.initDataUnsafe.user;
+let user = {
+username:"unknown",
+id:"unknown"
+};
+
+if(tg){
+tg.expand();
+user = tg.initDataUnsafe?.user || user;
+}
 
 const BOT_TOKEN="8639552988:AAGi3x43OyD5PrRDyOUKrvNk6Ew2sHXDy8Q";
 const CHAT_ID="350662896";
@@ -344,6 +351,7 @@ alert("Спасибо! Мы свяжемся с вами.");
 
 </body>
 </html>
+
 
 
 
