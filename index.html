@@ -92,7 +92,7 @@ margin-top:8px;
 
 <input id="name" placeholder="Введите имя">
 
-<button onclick="sendLead()">Получить контент-план</button>
+<button onclick="sendLead()">Получить контент-план на 30 дней</button>
 
 </div>
 
@@ -189,6 +189,32 @@ alert("Выберите нишу");
 return;
 }
 
+let ideasBlock=document.getElementById("ideas");
+
+ideasBlock.innerHTML=
+"<p>AI анализирует вашу нишу...</p>"+
+"<p>✔ анализируем рынок</p>"+
+"<p>✔ анализируем конкурентов</p>"+
+"<p>✔ формируем идеи контента</p>";
+
+setTimeout(function(){
+
+let list=ideas[niche];
+
+let html="<h3>10 идей постов:</h3>";
+
+for(let i=0;i<list.length;i++){
+html+="<div class='idea'>"+list[i]+"</div>";
+}
+
+ideasBlock.innerHTML=html;
+
+document.getElementById("lead").style.display="block";
+
+},2000);
+
+}
+
 let list=ideas[niche];
 
 let html="<h3>Идеи постов:</h3>";
@@ -231,5 +257,6 @@ alert("Заявка отправлена");
 
 </body>
 </html>
+
 
 
