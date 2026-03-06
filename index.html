@@ -15,7 +15,11 @@ min-height:100vh;
 display:flex;
 justify-content:center;
 align-items:center;
-background:#020617;
+
+background:
+radial-gradient(circle at 20% 20%, #3b82f6 0%, transparent 40%),
+radial-gradient(circle at 80% 70%, #9333ea 0%, transparent 40%),
+#020617;
 }
 
 .card{
@@ -24,6 +28,15 @@ padding:30px;
 border-radius:20px;
 width:320px;
 text-align:center;
+backdrop-filter:blur(10px);
+
+animation:float 6s ease-in-out infinite;
+}
+
+@keyframes float{
+0%{transform:translateY(0px);}
+50%{transform:translateY(-10px);}
+100%{transform:translateY(0px);}
 }
 
 select,input{
@@ -157,3 +170,4 @@ alert("Заявка отправлена");
 
 </body>
 </html>
+
