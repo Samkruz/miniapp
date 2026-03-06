@@ -215,20 +215,6 @@ document.getElementById("lead").style.display="block";
 
 }
 
-let list=ideas[niche];
-
-let html="<h3>Идеи постов:</h3>";
-
-for(let i=0;i<list.length;i++){
-html+="<div class='idea'>"+list[i]+"</div>";
-}
-
-document.getElementById("ideas").innerHTML=html;
-
-document.getElementById("lead").style.display="block";
-
-}
-
 function sendLead(){
 
 let name=document.getElementById("name").value;
@@ -257,6 +243,7 @@ alert("Заявка отправлена");
 
 </body>
 </html>
+
 
 
 
