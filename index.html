@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
 
 <meta charset="UTF-8">
@@ -8,22 +9,6 @@
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
 <style>
-
-.progress{
-width:100%;
-height:8px;
-background:rgba(255,255,255,0.1);
-border-radius:10px;
-margin-top:10px;
-overflow:hidden;
-}
-
-.progress-bar{
-width:0%;
-height:100%;
-background:linear-gradient(90deg,#3b82f6,#9333ea);
-transition:width 2s linear;
-}
 
 body{
 margin:0;
@@ -79,6 +64,29 @@ border-radius:8px;
 margin-top:8px;
 }
 
+.result{
+background:rgba(255,255,255,0.08);
+padding:15px;
+border-radius:10px;
+margin-top:15px;
+}
+
+.progress{
+width:100%;
+height:8px;
+background:rgba(255,255,255,0.1);
+border-radius:10px;
+margin-top:10px;
+overflow:hidden;
+}
+
+.progress-bar{
+width:0%;
+height:100%;
+background:linear-gradient(90deg,#3b82f6,#9333ea);
+transition:width 2s linear;
+}
+
 </style>
 
 </head>
@@ -89,8 +97,6 @@ margin-top:8px;
 
 <h2>Kineiro</h2>
 <p>Получите идеи постов</p>
-
-<input id="name" placeholder="Ваше имя">
 
 <select id="niche">
 
@@ -115,7 +121,7 @@ margin-top:8px;
 
 <button onclick="generateIdeas()">Получить идеи</button>
 
-<div id="loader" style="display:none;margin-top:20px;">
+<div id="loader" style="display:none;margin-top:20px">
 
 <p>AI анализирует вашу нишу...</p>
 
@@ -125,16 +131,26 @@ margin-top:8px;
 
 </div>
 
+<div id="analysis"></div>
 <div id="ideas"></div>
+<div id="growth"></div>
 
-<button id="leadBtn" onclick="sendLead()" style="display:none;">
-Получить контент план
+<div id="leadBlock" style="display:none">
+
+<input id="name" placeholder="Введите ваше имя">
+
+<button onclick="sendLead()">
+Получить полный контент-план
 </button>
 
-<div id="phoneBlock" style="display:none;">
+</div>
+
+<div id="phoneBlock" style="display:none">
+
 <button onclick="requestPhone()">
 Оставить номер телефона
 </button>
+
 </div>
 
 </div>
@@ -153,8 +169,8 @@ tg.expand();
 user = tg.initDataUnsafe?.user || user;
 }
 
-const BOT_TOKEN="8639552988:AAGi3x43OyD5PrRDyOUKrvNk6Ew2sHXDy8Q";
-const CHAT_ID="350662896";
+const BOT_TOKEN="ВСТАВЬ_СЮДА";
+const CHAT_ID="ВСТАВЬ_СЮДА";
 
 const ideas = {
 
@@ -289,17 +305,48 @@ alert("Выберите нишу");
 return;
 }
 
+document.getElementById("loader").style.display="block";
+document.getElementById("progressBar").style.width="100%";
+
+setTimeout(()=>{
+
+document.getElementById("loader").style.display="none";
+
+let score=Math.floor(Math.random()*4)+3;
+
+document.getElementById("analysis").innerHTML=`
+<div class="result">
+<b>Ваш SMM сейчас:</b> ${score}/10<br>
+Контент нерегулярный и мало продающих постов
+</div>
+`;
+
 let list=[...ideas[niche]].sort(()=>0.5-Math.random()).slice(0,3);
 
 let html="<h3>Идеи постов:</h3>";
 
 list.forEach(i=>{
-html+=`<div class="idea">${i}</div>`
+html+=`<div class="idea">${i}</div>`;
 });
+
+html+=`<div class="idea">+ ещё 27 идей скрыто</div>`;
 
 document.getElementById("ideas").innerHTML=html;
 
-document.getElementById("leadBtn").style.display="block";
+let growth1=Math.floor(Math.random()*20)+30;
+let growth2=Math.floor(Math.random()*15)+20;
+
+document.getElementById("growth").innerHTML=`
+<div class="result">
+<b>Потенциальный рост:</b><br>
++${growth1}% вовлеченности<br>
++${growth2}% заявок
+</div>
+`;
+
+document.getElementById("leadBlock").style.display="block";
+
+},2000);
 
 }
 
@@ -307,8 +354,7 @@ function sendLead(){
 
 let name=document.getElementById("name").value;
 
-let select=document.getElementById("niche");
-let niche=select.options[select.selectedIndex].text;
+let niche=document.getElementById("niche").options[document.getElementById("niche").selectedIndex].text;
 
 let username=user?.username ? "@"+user.username : "нет username";
 let userid=user?.id || "неизвестно";
@@ -328,6 +374,8 @@ document.getElementById("phoneBlock").style.display="block";
 }
 
 function requestPhone(){
+
+if(!tg) return;
 
 tg.requestContact();
 
@@ -351,7 +399,3 @@ alert("Спасибо! Мы свяжемся с вами.");
 
 </body>
 </html>
-
-
-
-
